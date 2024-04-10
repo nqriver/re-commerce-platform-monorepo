@@ -1,0 +1,31 @@
+import os
+
+# Each Flask web application contains a secret key which used to sign session cookies for protection against cookie data tampering.
+SECRET_KEY = os.urandom(32)
+
+# Grabs the folder where the script runs.
+# In my case it is, "F:\DataScience_Ai\hobby_projects\mvc_project\src"
+basedir = os.path.abspath(os.path.dirname(__file__))
+
+# Enable debug mode, that will refresh the page when you make changes.
+DEBUG = True
+
+DB_USER = os.environ.get('ACCOUNTING_MYSQL_DB_USER')
+DB_PASSWORD = os.environ.get('ACCOUNTING_MYSQL_DB_PASSWORD')
+DB_HOST = os.environ.get('ACCOUNTING_MYSQL_DB_HOST')
+DB_PORT = os.environ.get('ACCOUNTING_MYSQL_DB_PORT')
+DB_NAME = os.environ.get('ACCOUNTING_MYSQL_DB_NAME')
+
+JWT_SECRET = os.environ.get('JWT_SECRET_SIGNATURE') or 'LRFYY4iEwYOYmU5E9xL9hUOQKiAdlJ1234odfdacp213af2favma2rfav24favlacsaa3agvdaasdfataeg3qtqgter3qrt32tdgsadfgacdsbv34t32tr4afafawfasfasf'
+
+SQLALCHEMY_DATABASE_URI = f'mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}'
+
+# Turn off the Flask-SQLAlchemy event system and warning
+SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+MAIL_SERVER = 'smtp.gmail.com'
+MAIL_PORT = 465
+MAIL_USE_TLS = False
+MAIL_USE_SSL = True
+MAIL_USERNAME = 'ogloszeniowo.powiadomienia@gmail.com'
+MAIL_PASSWORD = 'blbs vhqf tout zwjs'

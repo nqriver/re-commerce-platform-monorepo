@@ -1,0 +1,4 @@
+## User token with 6 month validity
+```
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImVtYWlsQGVtYWlsLmNvbSIsInN1YiI6MSwiaWF0IjoxNzAxMTk1MjgyLCJyb2xlcyI6IlVTRVIiLCJleHAiOjE3MDM3ODcyODJ9.Z3FqU0DPfFgv7Uw0H6LmMga2xQEUPByB59oR1jCRuwc
+```

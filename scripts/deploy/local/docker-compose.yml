@@ -1,0 +1,139 @@
+version: "3.6"
+
+services:
+  auctions-ms-mongodb:
+    container_name: auctions-dev-mongo
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD=admin: passwd
+      MONGO_INITDB_DATABASE: ${AUCTIONS_MONGO_DB_NAME}
+    volumes:
+      - ./var/mongo-data:/var/lib/mongodb/data
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    ports:
+      - "27017:${AUCTIONS_MONGO_DB_PORT}"
+    profiles:
+      - all
+      - services
+      - backend
+
+  auctions-ms-redis:
+    container_name: auctions-dev-redis
+    image: redis:latest
+    ports:
+      - "6379:${AUCTIONS_REDIS_PORT}"
+    volumes:
+      - ./var/redis-data:/data
+    restart: always
+    command: [ "redis-server", "--appendonly", "yes" ]
+    profiles:
+      - all
+      - services
+      - backend
+
+  auctions-ms-backend:
+    image: auctions-ms-dev
+    container_name: auctions-ms-dev
+    build:
+      context: ../../../auctions-ms
+      dockerfile: ./local.Dockerfile
+      args:
+        DOCKER_BUILDKIT: 1
+        COMPOSE_DOCKER_CLI_BUILD: 1
+    ports:
+      - "8080:${AUCTIONS_MS_PORT}"
+    depends_on:
+      - auctions-ms-mongodb
+      - auctions-ms-redis
+    env_file:
+      - .env
+    profiles:
+      - all
+      - backend
+
+  accounting-ms-mysql:
+    image: mysql:8.3.0
+    container_name: accounting-dev-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${ACCOUNTING_MYSQL_DB_PASSWORD}
+      MYSQL_PASSWORD: ${ACCOUNTING_MYSQL_DB_PASSWORD}
+      MYSQL_DATABASE: ${ACCOUNTING_MYSQL_DB_NAME}
+      MYSQL_CHARSET: utf8mb4
+      MYSQL_COLLATION: utf8mb4_unicode_ci
+      MYSQL_INITDB_CHARSET: utf8mb4
+      LANG: C.UTF_8
+    ports:
+      - "3306:${ACCOUNTING_MYSQL_DB_PORT}"
+    volumes:
+      - ./var/accounting-mysql-data:/var/lib/mysql
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    profiles:
+      - all
+      - services
+      - backend
+
+  accounting-ms-backend:
+    build:
+      context: ../../../accounting-ms
+      dockerfile: ./Dockerfile
+    ports:
+      - "5000:${ACCOUNTING_MS_PORT}"
+    env_file:
+      - .env
+    depends_on:
+      - accounting-ms-mysql
+    entrypoint: ["./flask-entrypoint.sh", "${ACCOUNTING_MS_PORT}"]
+    profiles:
+      - all
+      - backend
+
+  content-verification-ms-mysql:
+    image: mysql:8.3.0
+    container_name: content-verification-dev-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${CONTENT_VERIFICATION_MYSQL_DB_PASSWORD}
+      MYSQL_PASSWORD: ${CONTENT_VERIFICATION_MYSQL_DB_PASSWORD}
+      MYSQL_DATABASE: ${CONTENT_VERIFICATION_MYSQL_DB_NAME}
+    ports:
+      - "3307:${CONTENT_VERIFICATION_MYSQL_DB_PORT}"
+    volumes:
+      - ./var/content-verification-mysql-data:/var/lib/mysql
+    profiles:
+      - all
+      - services
+      - backend
+
+  content-verification-ms-backend:
+    build:
+      context: ../../../content-verification-ms
+      dockerfile: ./Dockerfile
+    ports:
+      - "5001:${CONTENT_VERIFICATION_MS_PORT}"
+    env_file:
+      - .env
+    depends_on:
+      - content-verification-ms-mysql
+    entrypoint: ["./flask-entrypoint.sh", "${CONTENT_VERIFICATION_MS_PORT}"]
+    profiles:
+      - all
+      - backend
+
+
+#  frontend:
+#    image: niup-dev-frontend
+#    container_name: niup-dev-frontend
+#    build:
+#      context: ../../../frontend
+#      dockerfile: ./scripts/local.Dockerfile
+#    ports:
+#      - "${NIUP_FE_PORT}:${NIUP_FE_PORT}"
+#    environment:
+#      - NIUP_FE_PORT=${NIUP_FE_PORT}
+#    profiles:
+#      - all
+#      - frontend
+
+networks:
+  default:
+    name: auctions-dev-environment

@@ -1,0 +1,26 @@
+version: '3.4'
+
+services:
+  db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: users
+      MYSQL_CHARSET: utf8mb4
+      MYSQL_COLLATION: utf8mb4_unicode_ci
+      MYSQL_INITDB_CHARSET: utf8mb4
+      LANG: C.UTF_8
+    ports:
+      - "3306:3306"
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      DB_HOST: db
+    depends_on:
+      - db
+    command: flask run --host=0.0.0.0
