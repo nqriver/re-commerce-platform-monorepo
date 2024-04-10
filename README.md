@@ -1,6 +1,6 @@
-## Running with Docker
+## Running on Docker
 
-The application is fully dockerized. For convenience orchestration is wrapped with Makefile
+The application is fully dockerized. For convenience, docker orchestration is wrapped with Makefile
 
 
 #### To begin with...
@@ -40,9 +40,6 @@ This will create 10 users and 2 admins. Here is part of the actual code insertin
                        email='admin@admin.com')
 
 ```
-3. If 
-If you are running services for the first time, it may be necessary to run migrations for flask applications (there are 2)
-
 
 #### Resources
 
@@ -50,13 +47,4 @@ If you are running services for the first time, it may be necessary to run migra
   - `auctions-dev-environment`
 - volumes
   - `scripts/local/var/*`
-
-#### Misc
-- All container data is persistent, if you want to remove database and object storage, remove folders located in `scripts/local/var`.
-
-- With `make start` docker will try to build a container from scratch, so it's important that all Dockerfiles properly utilize cache.
-
-- The main docker-compose file uses env vars loaded from the corresponding .env file. Running it directly may cause issues.
-
-- We are loading environment variables to the session, so it's important to add prefixes to everything in case of potential conflicts.
 
