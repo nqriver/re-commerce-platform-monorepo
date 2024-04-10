@@ -74,6 +74,8 @@ services:
       - backend
 
   accounting-ms-backend:
+    image: accounting-ms-dev
+    container_name: accounting-ms-dev
     build:
       context: ../../../accounting-ms
       dockerfile: ./Dockerfile
@@ -105,6 +107,8 @@ services:
       - backend
 
   content-verification-ms-backend:
+    image: content-verification-ms-dev
+    container_name: content-verification-ms-dev
     build:
       context: ../../../content-verification-ms
       dockerfile: ./Dockerfile
