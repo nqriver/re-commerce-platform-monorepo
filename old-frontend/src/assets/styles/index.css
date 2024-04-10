@@ -1,0 +1,74 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;700&display=swap');
+
+@layer components {
+
+    .submit-button,
+    .login-button {
+        @apply bg-transparent border-blue-500 dark:border-neutral-200 text-blue-500 dark:text-neutral-200 font-semibold py-2 px-2 border rounded w-full hover:bg-blue-500 dark:hover:bg-neutral-600 hover:text-white hover:border-transparent transition-all duration-300 ease-linear
+    }
+
+    .swap-button {
+        @apply font-semibold py-2 px-2 border border-blue-500 dark:border-neutral-200 w-full text-blue-500 dark:text-neutral-200 transition-all duration-200 ease-linear h-12
+    }
+
+    .home-tooltip {
+        @apply absolute p-2 m-2 top-6 left-20 rounded-md shadow-md text-white bg-transparent border-white border text-sm font-bold transition-all duration-200 scale-0 origin-left
+    }
+
+    .navbar-logo {
+        @apply bg-white p-1 rounded-[2vw] mx-2 my-2 hover:rounded-[1.3vw] transition-all ease-linear duration-100 w-[4vw]
+    }
+
+    .disabled {
+        @apply opacity-50 cursor-not-allowed
+    }
+
+}
+
+body {
+    transition: background-color 0.3s ease, color 0.3s ease;
+    margin: 0;
+    font-family: 'Cairo', sans-serif;
+    background-color: rgb(25, 70, 113);
+}
+
+.gradient-bg {
+    background: linear-gradient(0deg, rgb(131, 165, 219), rgb(25, 71, 114));
+    height: 100vh;
+    width: 100vw;
+}
+
+.dark .gradient-bg {
+    background: white;
+}
+
+.gradient-bg-color-only {
+    background: linear-gradient(0deg, rgb(131, 165, 219), rgb(25, 71, 114));
+    width: 100vw;
+}
+
+.dark .gradient-bg-color-only {
+    background: linear-gradient(0deg, rgb(80, 80, 80), rgb(38, 38, 38));
+}
+
+.bg-original {
+    background-color: #194772;
+}
+
+.bg-linear-top-bottom {
+    background: linear-gradient(180deg, rgb(59 130 246 / 0.2), rgb(25, 71, 114));
+}
+
+option:hover {
+    color: red;
+}
+
+.hover\:custom-inner-shadow:hover {
+    --tw-shadow: inset -20px 0 40px 0 rgba(50, 50, 50, 0.5);
+    --tw-shadow-colored: inset -20px 0 0 0 var(--tw-shadow-color);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}

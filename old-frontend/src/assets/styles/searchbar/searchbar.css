@@ -1,0 +1,11 @@
+.search-bar-wrapper {
+    background-color: rgba(135, 206, 250, 0.2); /* Przykład koloru tła */
+    padding-top: 20px;
+    padding-bottom: 30px;
+}
+
+.search-form {
+    background-color: rgb(25, 71, 114);
+    border: 2px solid white;
+    border-radius: 4px;
+}

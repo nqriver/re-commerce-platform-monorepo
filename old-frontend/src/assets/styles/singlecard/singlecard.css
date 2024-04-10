@@ -1,0 +1,8 @@
+.card-hover-shadow {
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card-hover-shadow:hover {
+    transform: scale(1.01);
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.95);
+}
