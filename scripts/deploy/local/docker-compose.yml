@@ -9,7 +9,7 @@ services:
       MONGO_INITDB_ROOT_PASSWORD=admin: passwd
       MONGO_INITDB_DATABASE: ${AUCTIONS_MONGO_DB_NAME}
     volumes:
-      - ./var/mongo-data:/var/lib/mongodb/data
+      - ./var/mongo-data:/data/db
       - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
     ports:
       - "27017:${AUCTIONS_MONGO_DB_PORT}"
