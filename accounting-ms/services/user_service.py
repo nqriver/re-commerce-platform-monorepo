@@ -14,9 +14,6 @@ def login_user():
     password = request.json.get('password')
 
     user = User.query.filter_by(email=email).first()
-    if not user {
-        user = User.query.filter_by(username=email).first
-    }
     if not user or not bcrypt.check_password_hash(user.password, password):
         return jsonify({'message': 'Invalid credentials'}), 401
 
