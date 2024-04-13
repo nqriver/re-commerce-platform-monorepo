@@ -10,24 +10,32 @@ from flask_mail import Message, Mail
 bcrypt = Bcrypt()
 @cross_origin()
 def login_user():
-    jwt_signing_secret = current_app.config.get('JWT_SECRET')
     email = request.json.get('email')
     password = request.json.get('password')
 
     user = User.query.filter_by(email=email).first()
+    if not user {
+        user = User.query.filter_by(username=email).first
+    }
     if not user or not bcrypt.check_password_hash(user.password, password):
         return jsonify({'message': 'Invalid credentials'}), 401
 
+    token = generate_jwt_for_user(user)
+    return jsonify({'access_token': token}), 200
+
+
+def generate_jwt_for_user(user):
+    jwt_signing_secret = current_app.config.get('JWT_SECRET')
     token_data = {
-        'email': email,
+        'email': user.email,
         'sub': user.id,
         'iat': datetime.utcnow(),
         'roles': 'USER',
-        'exp': datetime.utcnow() + timedelta(minutes=60*24*30)
+        'exp': datetime.utcnow() + timedelta(minutes=60 * 24 * 30)
     }
-
     token = jwt.encode(token_data, jwt_signing_secret, algorithm='HS256')
-    return jsonify({'access_token': token}), 200
+    return token
+
 
 @cross_origin()
 def register_user():
@@ -48,9 +56,15 @@ def register_user():
     if not is_valid_phone_number(phone_number):
         return {'message': 'Phone number must be exactly 9 digits'}, 400
 
-    user = User.query.filter_by(email=email).first()
-    if user:
-        return {'message': 'Username or email already exists'}
+    userByEmail = User.query.filter_by(email=email).first()
+    if userByEmail:
+        return {'message': 'User with given email already exists'}
+    userByPhone = User.query.filter_by(phone_number=phone_number).first()
+    if userByPhone:
+        return {'message': 'User with given phone already exists'}
+    userByUsername = User.query.filter_by(username=username).first()
+    if userByUsername:
+        return {'message': 'User with given username already exists'}
 
     hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
     new_user = User(username=username,
@@ -59,11 +73,11 @@ def register_user():
                     phone_number=phone_number,
                     email=email,
                     password=hashed_password)
-
+    token = generate_jwt_for_user(new_user)
     try:
         db.session.add(new_user)
         db.session.commit()
-        return {'message': 'User registered successfully'}, 200
+        return {'access_token': token}, 200
     except Exception as e:
         return {'message': 'An error occurred while registering user'}, 500
 

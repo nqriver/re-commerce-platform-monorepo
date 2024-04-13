@@ -78,7 +78,7 @@ def register_admin():
     try:
         db.session.add(new_user)
         db.session.commit()
-        return jsonify({'message': 'Admin registered successfully'}), 200
+        return {'message': 'Admin registered successfully'}, 200
     except Exception as e:
         return jsonify({'code': 'ACC06', 'message': ERROR_DICT['ACC06']})
 
